@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Roblox Downloader</title>
+        <link rel="icon" href="favicon.svg">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+            :root {
+                --bg-color: #0d1117;
+                --panel-bg: #161b22;
+                --border-color: #30363d;
+                --text-main: #c9d1d9;
+                --text-muted: #8b949e;
+                --accent-blue: #58a6ff;
+                --accent-btn: #1f6feb;
+            }
+
+            * { box-sizing: border-box; }
+
+            body {
+                font-family: 'JetBrains Mono', monospace;
+                background-color: var(--bg-color);
+                color: var(--text-main);
+                margin: 0;
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-height: 100vh;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 600px;
+            }
+
+            a { color: var(--accent-blue); text-decoration: none; }
+            a:hover { text-decoration: underline; }
+
+            /* BRANDING HEADER */
+            header {
+                margin-bottom: 25px;
+                padding-bottom: 15px;
+                text-align: center;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .title { 
+                font-size: 1.4rem; 
+                font-weight: 700; 
+                display: block; 
+                margin-bottom: 8px; 
+                color: #fff;
+            }
+            .meta { 
+                font-size: 0.9rem; 
+                color: var(--text-muted); 
+            }
+            .meta span {
+                color: var(--accent-blue);
+                font-weight: bold;
+            }
+
+            /* MAIN FORM */
+            form {
+                background-color: var(--panel-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 25px;
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+
+            .form-group label {
+                font-size: 0.8rem;
+                color: var(--text-muted);
+                display: block;
+                margin-bottom: 6px;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            /* Inputs */
+            input[type="text"], input[type="number"], select {
+                width: 100%;
+                background-color: var(--bg-color);
+                border: 1px solid var(--border-color);
+                color: var(--text-main);
+                font-family: 'JetBrains Mono', monospace;
+                padding: 12px;
+                border-radius: 6px;
+                outline: none;
+                font-size: 0.95rem;
+            }
+
+            input:focus, select:focus { border-color: var(--accent-blue); }
+
+            /* Details / Advanced */
+            details {
+                border: 1px solid var(--border-color);
+                border-radius: 6px;
+                background-color: rgba(255,255,255,0.02);
+            }
+
+            details summary {
+                padding: 10px;
+                cursor: pointer;
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                list-style: none;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            details summary::before {
+                content: "▶";
+                font-size: 0.7em;
+                transition: transform 0.2s;
+            }
+            details[open] summary::before { transform: rotate(90deg); }
+
+            .advanced-content {
+                padding: 15px;
+                border-top: 1px solid var(--border-color);
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            /* Buttons */
+            .button-group { display: flex; gap: 10px; margin-top: 5px; }
+
+            button {
+                font-family: 'JetBrains Mono', monospace;
+                padding: 12px 20px;
+                cursor: pointer;
+                font-weight: 700;
+                border-radius: 6px;
+                border: 1px solid transparent;
+                transition: background 0.2s;
+            }
+
+            .btn-download { background-color: #238636; color: #fff; flex: 2; }
+            .btn-download:hover { background-color: #2ea043; }
+
+            .btn-copy { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-main); flex: 1; }
+            .btn-copy:hover { background-color: var(--border-color); }
+
+            .btn-fetch {
+                background-color: var(--accent-btn);
+                color: white;
+                flex: 0 0 auto; 
+                padding: 0 15px;
+            }
+            .btn-fetch:hover { background-color: #3b8cfc; }
+
+            /* Console Output */
+            output {
+                display: block;
+                margin-top: 20px;
+                background-color: #090c10;
+                border: 1px solid var(--border-color);
+                padding: 15px;
+                border-radius: 6px;
+                width: 100%;
+                min-height: 100px;
+                font-size: 0.8rem;
+                color: #8b949e;
+                white-space: pre-wrap;
+            }
+            output:not(:empty)::before {
+                content: "> System Log";
+                display: block;
+                color: var(--border-color);
+                border-bottom: 1px solid #222;
+                padding-bottom: 5px;
+                margin-bottom: 10px;
+                font-size: 0.75rem;
+            }
+
+            /* CREDITS FOOTER */
+            .credits {
+                margin-top: 40px;
+                text-align: center;
+                border-top: 1px solid var(--border-color);
+                padding-top: 20px;
+                width: 100%;
+                color: var(--text-muted);
+                font-size: 0.8rem;
+            }
+
+            .credits a {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                color: var(--text-muted);
+                transition: color 0.2s;
+                background-color: var(--panel-bg);
+                padding: 8px 16px;
+                border-radius: 50px;
+                border: 1px solid var(--border-color);
+                margin-top: 10px;
+            }
+
+            .credits a:hover {
+                color: #fff;
+                border-color: var(--text-muted);
+                text-decoration: none;
+            }
+
+            .credits svg {
+                fill: currentColor;
+                width: 20px;
+                height: 20px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <header>
+                <span class="title">Roblox Downloader</span>
+                <div class="meta">
+                    website made by <span>Dert😁</span>
+                </div>
+            </header>
+
+            <noscript><p style="color: red; text-align: center;">(Enable JavaScript to use this tool)</p></noscript>
+
+            <div id="downloadFormDiv" hidden>
+                <form id="downloadForm" target="_blank" action="">
+                    
+                    <div class="form-group">
+                        <label for="binaryType">Binary Type</label>
+                        <select id="binaryType" name="binaryType">
+                            <option value="WindowsPlayer">WindowsPlayer</option>
+                            <option value="WindowsStudio64">WindowsStudio64</option>
+                            <option value="MacPlayer">MacPlayer</option>
+                            <option value="MacStudio">MacStudio</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="channel">Channel</label>
+                        <input id="channel" name="channel" type="text" placeholder="LIVE">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="version">Version Hash</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input id="version" name="version" type="text" placeholder="e.g. version-xxxxxxxx">
+                            <button type="button" class="btn-fetch" onclick="autoFillVersion()" title="Fetch latest version">Get Latest</button>
+                        </div>
+                    </div>
+
+                    <details>
+                        <summary>Advanced Options (Compression)</summary>
+                        <div class="advanced-content">
+                            <div>
+                                <label for="compressionLevel" style="font-size:0.75rem; color: var(--text-muted);">Level (1-9)</label>
+                                <input id="compressionLevel" name="compressionLevel" type="number" min="1" max="9" value="5">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input id="compressZip" name="compressZip" type="checkbox" style="width: 20px; height: 20px;">
+                                <label for="compressZip" style="margin:0; cursor: pointer;">Compress Zip</label>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="button-group">
+                        <button type="button" class="btn-download" onclick="downloadFromForm();">Download</button>
+                        <button type="button" class="btn-copy" onclick="copyPermLink();">Copy Link</button>
+                    </div>
+                </form>
+            </div>
+
+            <output id="consoleText"></output>
+
+            <div class="credits">
+                <p>Based on the RDD project</p>
+                <a href="https://github.com/latte-soft/rdd" target="_blank">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                    <span>Original Source</span>
+                </a>
+            </div>
+        </div>
+
+        <script src="js/jszip.min.js"></script>
+        <script src="js/rdd.js"></script>
+    </body>
+</html>
